@@ -1,5 +1,5 @@
 # 类定义
-class people:
+class People:
     # 定义基本属性
     name = ''
     age = 0
@@ -17,12 +17,12 @@ class people:
 
 
 # 单继承示例
-class student(people):
+class student(People):
     grade = ''
 
     def __init__(self, n, a, w, g):
         # 调用父类的构函
-        people.__init__(self, n, a, w)
+        People.__init__(self, n, a, w)
         self.grade = g
 
     # 覆写父类的方法

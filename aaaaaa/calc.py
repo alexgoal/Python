@@ -27,3 +27,5 @@ a = 10
 b = 5
 c = a // b
 print("7 - c 的值为：", c)
+
+print(__file__)
