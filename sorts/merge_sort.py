@@ -1,72 +1,63 @@
 """
-This is a pure python implementation of the merge sort algorithm
+This is a pure Python implementation of the merge sort algorithm.
 
 For doctests run following command:
 python -m doctest -v merge_sort.py
 or
 python3 -m doctest -v merge_sort.py
-
 For manual testing run:
 python merge_sort.py
 """
-from __future__ import print_function
 
 
-def merge_sort(collection):
-    """Pure implementation of the merge sort algorithm in Python
+def merge_sort(collection: list) -> list:
+    """
+    Sorts a list using the merge sort algorithm.
 
-    :param collection: some mutable ordered collection with heterogeneous
-    comparable items inside
-    :return: the same collection ordered by ascending
+    :param collection: A mutable ordered collection with comparable items.
+    :return: The same collection ordered in ascending order.
+
+    Time Complexity: O(n log n)
 
     Examples:
     >>> merge_sort([0, 5, 3, 2, 2])
     [0, 2, 2, 3, 5]
-
     >>> merge_sort([])
     []
-
     >>> merge_sort([-2, -5, -45])
     [-45, -5, -2]
     """
-    length = len(collection)
-    if length > 1:
-        midpoint = length // 2
-        left_half = merge_sort(collection[:midpoint])
-        right_half = merge_sort(collection[midpoint:])
-        i = 0
-        j = 0
-        k = 0
-        left_length = len(left_half)
-        right_length = len(right_half)
-        while i < left_length and j < right_length:
-            if left_half[i] < right_half[j]:
-                collection[k] = left_half[i]
-                i += 1
-            else:
-                collection[k] = right_half[j]
-                j += 1
-            k += 1
 
-        while i < left_length:
-            collection[k] = left_half[i]
-            i += 1
-            k += 1
+    def merge(left: list, right: list) -> list:
+        """
+        Merge two sorted lists into a single sorted list.
 
-        while j < right_length:
-            collection[k] = right_half[j]
-            j += 1
-            k += 1
+        :param left: Left collection
+        :param right: Right collection
+        :return: Merged result
+        """
+        result = []
+        while left and right:
+            result.append(left.pop(0) if left[0] <= right[0] else right.pop(0))
+        result.extend(left)
+        result.extend(right)
+        return result
 
-    return collection
+    if len(collection) <= 1:
+        return collection
+    mid_index = len(collection) // 2
+    return merge(merge_sort(collection[:mid_index]), merge_sort(collection[mid_index:]))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
+    import doctest
+
+    doctest.testmod()
+
     try:
-        raw_input          # Python 2
-    except NameError:
-        raw_input = input  # Python 3
-
-    user_input = raw_input('Enter numbers separated by a comma:\n').strip()
-    unsorted = [int(item) for item in user_input.split(',')]
-    print(merge_sort(unsorted))
+        user_input = input("Enter numbers separated by a comma:\n").strip()
+        unsorted = [int(item) for item in user_input.split(",")]
+        sorted_list = merge_sort(unsorted)
+        print(*sorted_list, sep=",")
+    except ValueError:
+        print("Invalid input. Please enter valid integers separated by commas.")
